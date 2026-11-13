@@ -1,0 +1,89 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#a5dcf3" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <title>Block Brawl: Isla del Trueno</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div id="game-shell">
+      <div id="scene" aria-label="Escenario 3D de combate"></div>
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Block Brawl, inicio"><span class="brand-mark">B</span><span>BLOCK <b>BRAWL</b></span></a>
+        <div class="arena-tag"><span class="live-dot"></span> ISLA DEL TRUENO <span class="tag-divider">/</span> ARENA 01 <span class="gamepad-status" id="gamepad-status" role="status" aria-label="Estado del mando" title="Conecta un mando compatible"><i></i><b>SIN MANDO</b></span></div>
+        <div class="coin-counter" role="status" aria-label="Monedas acumuladas"><span>●</span><b id="coin-count">0</b><small>MONEDAS</small></div>
+        <div class="topbar-actions"><button class="shop-open-button" id="shop-open-button" type="button" title="Pausar y abrir tienda">TIENDA</button><button class="fullscreen-button" id="fullscreen-button" type="button" aria-label="Activar pantalla completa" title="Pantalla completa">⛶</button><button class="sound-button" id="sound-button" type="button" aria-label="Desactivar sonidos" title="Sonidos activados">♫</button></div>
+      </header>
+      <section class="player-panel" aria-label="Estado del jugador">
+        <div class="panel-label"><span class="eyebrow">LUCHADOR</span><span class="round-label">RONDA <b id="round-number">01</b></span></div>
+        <div class="player-name"><span class="player-avatar">✦</span> NOVA <span class="level" id="player-level">NV. 01</span></div>
+        <div class="health-track"><div class="health-fill" id="player-health-fill"></div><span id="player-health-text">100 / 100</span></div>
+        <div class="weapon-display" id="weapon-display"><span class="weapon-icon" id="weapon-icon">✊</span><span><small>ARMA EQUIPADA</small><b id="weapon-name">MANOS</b></span><span class="weapon-rank" id="weapon-rank">INICIAL</span></div>
+        <div class="panel-footer"><span>ENERGÍA</span><div class="energy-track" id="player-energy-track"><i></i><i></i><i></i><i></i><i></i><i></i></div><span id="ko-count">0 K.O.</span></div>
+        <div class="shield-status" id="shield-status" hidden></div>
+      </section>
+      <section class="player-panel player-two-panel" id="player-two-panel" aria-label="Estado del jugador 2">
+        <div class="panel-label"><span class="eyebrow">JUGADOR 2</span><span class="round-label">COOPERATIVO</span></div>
+        <div class="player-name"><span class="player-avatar player-two-avatar">✦</span> PULSE <span class="level">P2</span></div>
+        <div class="health-track"><div class="health-fill player-two-health-fill" id="player-two-health-fill"></div><span id="player-two-health-text">100 / 100</span></div>
+        <div class="panel-footer"><span>ENERGÍA</span><div class="energy-track" id="player-two-energy-track"><i></i><i></i><i></i><i></i><i></i><i></i></div><span id="player-two-status">LISTO</span></div>
+        <div class="shield-status" id="player-two-shield-status" hidden></div>
+        <div class="player-two-combo" id="player-two-combo">COMBO <b>0/5</b><span class="combo-hits"><i></i><i></i><i></i><i></i><i></i></span></div>
+      </section>
+      <div class="center-message" id="center-message" aria-live="polite">
+        <div class="message-kicker">PREPÁRATE, NOVA</div>
+        <h1>¡A LA <span>ARENA!</span></h1>
+        <p>Derrota a los bots y conquista la isla.</p>
+        <button class="player-two-toggle" id="player-two-toggle" type="button" aria-pressed="false">+ JUGAR CON PLAYER 2</button>
+        <p class="player-two-controls" id="player-two-controls" hidden>P2: FLECHAS PARA MOVER · 1 PUÑO · 2 PATADA · 3 AGARRE · 0 SALTO · 5 BLOQUEO</p>
+        <button id="start-button" type="button">EMPEZAR <span>→</span></button>
+      </div>
+      <div class="combat-callout" id="combat-callout" aria-live="polite"></div>
+      <div class="wave-toast" id="wave-toast">OLEADA <b>01</b> <span>·</span> ¡QUE COMIENCE!</div>
+      <div class="world-labels" id="world-labels"></div>
+      <section class="boss-hud" id="boss-hud" aria-label="Barra de vida del jefe" hidden>
+        <div class="boss-hud-heading"><b id="boss-hud-name">JEFE</b><span id="boss-hud-health"></span></div>
+        <div class="boss-hud-track"><i id="boss-hud-fill"></i></div>
+      </section>
+      <div class="bottom-ui">
+        <div class="objective"><span class="objective-icon">✦</span><div><b>PELEA POR LA ISLA</b><small>Gana quien quede en pie</small></div></div>
+        <div class="keyboard-hint"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>MOVER</span><i></i><kbd>J</kbd><span>PUÑO</span><kbd>K</kbd><span>PATADA</span><kbd>G</kbd><span>AGARRE</span><kbd>Q</kbd><span>MANOS/ARMA</span><i class="mouse-divider"></i><span class="mouse-hint">ARRASTRA: MIRAR · CLIC: PUÑO · BOTÓN DERECHO: BLOQUEAR</span><i class="pad-divider"></i><span class="pad-hint">LS: MOVER · RS: MIRAR · ×: SALTO · □: PUÑO · ○: PATADA · R1: AGARRE</span></div>
+        <div class="touch-controls" aria-label="Controles táctiles">
+          <div class="move-pad" id="move-pad" role="application" aria-label="Joystick: arrastra para mover"><div class="joystick-base"><div class="joystick-thumb" id="joystick-thumb"></div></div><span class="joystick-hint">MOVER</span></div>
+          <div class="action-pad"><button class="action punch" type="button" data-action="punch">PU&#209;O</button><button class="action kick" type="button" data-action="kick">PATADA</button><button class="action grab" type="button" data-action="grab">AGARRAR</button><button class="action block" type="button" data-action="block">BLOQUEAR</button><button class="action jump" type="button" data-action="jump" aria-label="Saltar">SALTAR</button><button class="action weapon-toggle" type="button" data-action="weapon">ARMA</button></div>
+        </div>
+      </div>
+      <div class="combo-meter"><span>RACHA</span><b id="combo-count">0/5</b><small>HITS</small><span class="combo-hits" id="combo-hits"><i></i><i></i><i></i><i></i><i></i></span></div>
+      <div class="toast" id="toast" role="status"></div>
+      <section class="shop-modal" id="shop-modal" aria-labelledby="shop-title" aria-modal="true" role="dialog" hidden>
+        <div class="shop-card">
+          <div class="shop-heading"><div><span class="shop-kicker">LA PUERTA DEL DUENDE</span><h2 id="shop-title">TIENDA MÁGICA</h2></div><button class="shop-close" id="shop-close" type="button" aria-label="Cerrar tienda y continuar">×</button></div>
+          <p class="shop-copy">El tiempo está detenido mientras compras. Al salir, continúas justo donde quedaste.</p>
+          <div class="shop-wallet">TUS MONEDAS <b>● <span id="shop-coins">0</span></b></div>
+          <div class="shop-grid">
+            <button class="shop-item" type="button" data-shop-item="heart"><span class="shop-item-icon heart-icon">♥</span><span><b>Corazón</b><small>Recupera 35 de vida</small></span><strong>3 ●</strong></button>
+            <button class="shop-item" type="button" data-shop-item="sword"><span class="shop-item-icon">⚔</span><span><b>Espada</b><small>Daño equilibrado</small></span><strong>5 ●</strong></button>
+            <button class="shop-item" type="button" data-shop-item="bazooka"><span class="shop-item-icon">✹</span><span><b>Bazuca</b><small>Daño explosivo</small></span><strong>8 ●</strong></button>
+            <button class="shop-item" type="button" data-shop-item="laser"><span class="shop-item-icon">✦</span><span><b>Lanzador láser</b><small>Proyectil rápido</small></span><strong>10 ●</strong></button>
+            <button class="shop-item" type="button" data-shop-item="wood-shield"><span class="shop-item-icon shield-icon">▰</span><span><b>Escudo de madera</b><small>Bloquea 3 golpes sin daño</small></span><strong>4 ●</strong></button>
+            <button class="shop-item" type="button" data-shop-item="metal-shield"><span class="shop-item-icon metal-icon">⬟</span><span><b>Escudo de metal</b><small>Bloquea 5 golpes sin daño</small></span><strong>7 ●</strong></button>
+          </div>
+          <div class="shop-footer"><span id="shop-feedback" role="status">Elige un objeto para comprar.</span><button class="shop-resume" id="shop-resume" type="button">VOLVER A LA PARTIDA</button></div>
+        </div>
+      </section>
+    </div>
+    <script type="importmap">
+      { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js" } }
+    </script>
+    <script type="module" src="./src/main.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => {}));
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "id": "./",
+  "name": "Block Brawl: Isla del Trueno",
+  "short_name": "Block Brawl",
+  "description": "Juego de combate para móvil y escritorio.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#a5dcf3",
+  "theme_color": "#a5dcf3",
+  "icons": [
+    { "src": "./icons/app-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

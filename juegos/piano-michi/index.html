@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff7e8">
+  <title>Estrellita, ¿dónde estás? | El piano de Michi</title>
+  <style>
+    :root {
+      font-family: "Trebuchet MS", "Arial Rounded MT Bold", Arial, sans-serif;
+      color: #463c67;
+      background: #fff7e8;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      --purple: #7657c8;
+      --pink: #ff91a9;
+      --shadow: 0 7px 0 rgba(87, 67, 133, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      padding: 18px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 8% 15%, #ffe1a9 0 7px, transparent 8px),
+        radial-gradient(circle at 91% 23%, #f6c6e8 0 8px, transparent 9px),
+        radial-gradient(circle at 12% 84%, #c9e8ff 0 7px, transparent 8px),
+        #fff7e8;
+    }
+
+    button { font: inherit; }
+
+    .game {
+      width: min(760px, 100%);
+      padding: clamp(18px, 4vw, 34px);
+      border: 4px solid #fff;
+      border-radius: 34px;
+      background: #fffdf9;
+      box-shadow: 0 12px 0 #f1dfca, 0 20px 45px rgba(99, 73, 127, .12);
+      text-align: center;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: #8a7ba6;
+      font-size: .95rem;
+      font-weight: 800;
+    }
+
+    .brand { display: flex; align-items: center; gap: 8px; }
+    .brand-mark { font-size: 1.5rem; }
+
+    .sound-toggle {
+      min-height: 44px;
+      padding: 8px 13px;
+      border: 2px solid #eee7f5;
+      border-radius: 18px;
+      color: #695b83;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    h1 {
+      margin: 16px 0 6px;
+      color: #6648b3;
+      font-size: clamp(2rem, 7vw, 3.25rem);
+      line-height: 1.05;
+    }
+
+    .subtitle { margin: 0; color: #8b809b; font-size: 1.05rem; }
+
+    .score-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 18px 0 16px;
+    }
+
+    .badge {
+      padding: 8px 14px;
+      border-radius: 18px;
+      background: #f2ecff;
+      color: #7359ad;
+      font-size: .95rem;
+      font-weight: 800;
+    }
+
+    .badge.stars { background: #fff3cf; color: #946d19; }
+
+    .cat-area {
+      display: grid;
+      grid-template-columns: 105px 1fr;
+      align-items: center;
+      gap: 12px;
+      max-width: 520px;
+      margin: 0 auto 15px;
+      text-align: left;
+    }
+
+    .cat {
+      display: grid;
+      width: 96px;
+      height: 96px;
+      place-items: center;
+      border: 4px solid #fff;
+      border-radius: 50%;
+      background: #ffe4ee;
+      box-shadow: var(--shadow);
+      font-size: 4rem;
+      transition: transform .2s ease;
+    }
+
+    .cat.dancing { animation: dance .35s ease-in-out infinite alternate; }
+    @keyframes dance { to { transform: rotate(9deg) scale(1.08); } }
+
+    .speech {
+      position: relative;
+      min-height: 76px;
+      display: grid;
+      align-content: center;
+      padding: 14px 18px;
+      border: 3px solid #f1e9fa;
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      color: #51466c;
+      font-size: clamp(1.05rem, 3vw, 1.3rem);
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .speech::before {
+      position: absolute;
+      left: -11px;
+      top: 28px;
+      width: 16px;
+      height: 16px;
+      border-bottom: 3px solid #f1e9fa;
+      border-left: 3px solid #f1e9fa;
+      background: #fff;
+      content: "";
+      transform: rotate(45deg);
+    }
+
+    .sequence {
+      min-height: 37px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 12px;
+    }
+
+    .note-chip {
+      min-width: 36px;
+      padding: 6px 10px;
+      border-radius: 14px;
+      color: white;
+      font-weight: 900;
+      box-shadow: 0 3px 0 rgba(75, 58, 110, .15);
+      animation: pop .2s ease-out;
+    }
+    @keyframes pop { from { transform: scale(.7); } to { transform: scale(1); } }
+
+    .piano {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 9px;
+      max-width: 690px;
+      margin: 0 auto;
+    }
+
+    .key {
+      min-height: clamp(100px, 18vw, 150px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 12px 4px 15px;
+      border: 0;
+      border-radius: 20px;
+      color: #fff;
+      box-shadow: 0 7px 0 rgba(76, 57, 98, .16);
+      cursor: pointer;
+      touch-action: manipulation;
+      user-select: none;
+      transition: transform .08s ease, box-shadow .08s ease, filter .08s ease;
+    }
+
+    .key:hover { filter: brightness(1.05); }
+    .key:active, .key.playing {
+      transform: translateY(6px) scale(.98);
+      box-shadow: 0 1px 0 rgba(76, 57, 98, .16);
+      filter: brightness(1.12);
+    }
+
+    .key:focus-visible, button:focus-visible {
+      outline: 4px solid #49338b;
+      outline-offset: 3px;
+    }
+
+    .key .note { font-size: clamp(1rem, 3.6vw, 1.5rem); font-weight: 900; }
+    .key .solfege { font-size: .7rem; opacity: .93; }
+    .key .emoji { font-size: clamp(1.4rem, 5vw, 2rem); }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 21px;
+    }
+
+    .action {
+      min-height: 52px;
+      padding: 11px 20px;
+      border: 0;
+      border-radius: 18px;
+      background: #7657c8;
+      box-shadow: 0 5px 0 #573e9f;
+      color: white;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform .1s ease, box-shadow .1s ease;
+    }
+
+    .action:active { transform: translateY(4px); box-shadow: 0 1px 0 #573e9f; }
+    .action.secondary { background: #ff91a9; box-shadow: 0 5px 0 #dc6c89; }
+    .action.full-song { background: #42a58b; box-shadow: 0 5px 0 #287d68; }
+    .action:disabled { opacity: .55; cursor: default; }
+
+    .hint { margin: 17px 0 0; color: #9a8da8; font-size: .9rem; }
+
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      .game { padding: 16px 12px 20px; border-radius: 27px; }
+      .topline { font-size: .82rem; }
+      .cat-area { grid-template-columns: 76px 1fr; gap: 9px; }
+      .cat { width: 70px; height: 70px; font-size: 3rem; }
+      .speech { min-height: 70px; padding: 10px 13px; font-size: 1rem; }
+      .piano { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+      .key { min-height: 94px; border-radius: 15px; padding-bottom: 10px; }
+      .key .note { font-size: 1.2rem; }
+      .key .emoji { font-size: 1.5rem; }
+      .key .solfege { font-size: .68rem; }
+      .controls { margin-top: 17px; }
+      .action { padding: 10px 15px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="game" aria-label="Juego del piano de Michi">
+    <div class="topline">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">🎵</span> ¡Vamos a jugar!</div>
+      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="true">🔊 Sonido</button>
+    </div>
+
+    <h1>El piano de Michi</h1>
+    <p class="subtitle">¡Aprende a tocar “Estrellita, ¿dónde estás?”!</p>
+
+    <div class="score-row" aria-live="polite">
+      <span class="badge" id="songBadge">Estrellita, ¿dónde estás? · parte 1 de 12</span>
+      <span class="badge stars" id="starBadge">⭐ 0</span>
+    </div>
+
+    <section class="cat-area" aria-label="Instrucciones del gatito">
+      <div class="cat" id="cat" aria-hidden="true">🐱</div>
+      <div class="speech" id="message" aria-live="polite">¡Hola, amiguito! Toca “Escuchar” y repite mi canción.</div>
+    </section>
+
+    <div class="sequence" id="sequence" aria-label="Notas de la canción"></div>
+
+    <section class="piano" id="piano" aria-label="Piano de ocho notas">
+      <button class="key" type="button" data-note="0" aria-label="Do rojo" style="background:#ed6572">
+        <span class="emoji" aria-hidden="true">🍓</span><span class="note">Do</span><span class="solfege">rojo</span>
+      </button>
+      <button class="key" type="button" data-note="1" aria-label="Re naranja" style="background:#ed8734">
+        <span class="emoji" aria-hidden="true">🍊</span><span class="note">Re</span><span class="solfege">naranja</span>
+      </button>
+      <button class="key" type="button" data-note="2" aria-label="Mi amarillo" style="background:#b88b08">
+        <span class="emoji" aria-hidden="true">⭐</span><span class="note">Mi</span><span class="solfege">amarillo</span>
+      </button>
+      <button class="key" type="button" data-note="3" aria-label="Fa verde" style="background:#349c68">
+        <span class="emoji" aria-hidden="true">🍀</span><span class="note">Fa</span><span class="solfege">verde</span>
+      </button>
+      <button class="key" type="button" data-note="4" aria-label="Sol turquesa" style="background:#259a9b">
+        <span class="emoji" aria-hidden="true">🐸</span><span class="note">Sol</span><span class="solfege">turquesa</span>
+      </button>
+      <button class="key" type="button" data-note="5" aria-label="La azul" style="background:#397fc9">
+        <span class="emoji" aria-hidden="true">🐟</span><span class="note">La</span><span class="solfege">azul</span>
+      </button>
+      <button class="key" type="button" data-note="6" aria-label="Si violeta" style="background:#7954b8">
+        <span class="emoji" aria-hidden="true">🍇</span><span class="note">Si</span><span class="solfege">violeta</span>
+      </button>
+      <button class="key" type="button" data-note="7" aria-label="Do agudo rosa" style="background:#d64f93">
+        <span class="emoji" aria-hidden="true">🌸</span><span class="note">Do</span><span class="solfege">agudo</span>
+      </button>
+    </section>
+
+    <div class="controls">
+      <button class="action" id="listenButton" type="button">🎶 Escuchar</button>
+      <button class="action secondary" id="repeatButton" type="button" disabled>🔁 Otra vez</button>
+      <button class="action full-song" id="fullSongButton" type="button">🎵 Canción completa</button>
+    </div>
+    <p class="hint">Puedes tocar las teclas con tus deditos.</p>
+  </main>
+
+  <script>
+    (() => {
+      const notes = [
+        { name: "Do", color: "#ed6572", frequency: 261.63 },
+        { name: "Re", color: "#ed8734", frequency: 293.66 },
+        { name: "Mi", color: "#b88b08", frequency: 329.63 },
+        { name: "Fa", color: "#349c68", frequency: 349.23 },
+        { name: "Sol", color: "#259a9b", frequency: 392.00 },
+        { name: "La", color: "#397fc9", frequency: 440.00 },
+        { name: "Si", color: "#7954b8", frequency: 493.88 },
+        { name: "Do", color: "#d64f93", frequency: 523.25 }
+      ];
+      const songs = [
+        {
+          title: "Estrellita, ¿dónde estás?",
+          phrases: [
+            [0, 0, 4, 4], [5, 5, 4], [3, 3, 2, 2], [1, 1, 0],
+            [4, 4, 3, 3], [2, 2, 1], [4, 4, 3, 3], [2, 2, 1],
+            [0, 0, 4, 4], [5, 5, 4], [3, 3, 2, 2], [1, 1, 0]
+          ]
+        }
+      ];
+      const message = document.getElementById("message");
+      const sequenceView = document.getElementById("sequence");
+      const cat = document.getElementById("cat");
+      const listenButton = document.getElementById("listenButton");
+      const repeatButton = document.getElementById("repeatButton");
+      const fullSongButton = document.getElementById("fullSongButton");
+      const soundToggle = document.getElementById("soundToggle");
+      const songBadge = document.getElementById("songBadge");
+      const starBadge = document.getElementById("starBadge");
+      const keys = Array.from(document.querySelectorAll(".key"));
+
+      let audioContext;
+      let sequence = [];
+      let playerIndex = 0;
+      let songIndex = 0;
+      let phraseIndex = 0;
+      let stars = 0;
+      let isPlaying = false;
+      let soundOn = true;
+      let phase = "ready";
+
+      function getAudioContext() {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return null;
+        if (!audioContext) audioContext = new AudioContextClass();
+        if (audioContext.state === "suspended") audioContext.resume();
+        return audioContext;
+      }
+
+      function playNote(index, duration = 0.85) {
+        const context = getAudioContext();
+        if (soundOn && context) {
+          const partials = [[1, 1], [2, 0.38], [3, 0.16], [4, 0.07], [5, 0.03]];
+          const startTime = context.currentTime;
+          partials.forEach(([harmonic, volume]) => {
+            const oscillator = context.createOscillator();
+            const gain = context.createGain();
+            oscillator.type = "sine";
+            oscillator.frequency.value = notes[index].frequency * harmonic;
+            gain.gain.setValueAtTime(0.0001, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.16 * volume, startTime + 0.008);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+            oscillator.connect(gain);
+            gain.connect(context.destination);
+            oscillator.start(startTime);
+            oscillator.stop(startTime + duration);
+          });
+        }
+
+        const key = keys[index];
+        key.classList.add("playing");
+        window.setTimeout(() => key.classList.remove("playing"), duration * 1000);
+      }
+
+      function speak(text) {
+        if (!soundOn || !("speechSynthesis" in window)) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "es-ES";
+        utterance.rate = 0.88;
+        utterance.pitch = 1.25;
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function say(text, voiceText = text) {
+        message.textContent = text;
+        speak(voiceText);
+      }
+
+      function showSequence(notesToShow = sequence) {
+        sequenceView.replaceChildren();
+        notesToShow.forEach((noteIndex) => {
+          const chip = document.createElement("span");
+          chip.className = "note-chip";
+          chip.textContent = notes[noteIndex].name;
+          chip.style.backgroundColor = notes[noteIndex].color;
+          sequenceView.append(chip);
+        });
+      }
+
+      function updateSongBadge() {
+        songBadge.textContent = `${songs[songIndex].title} · parte ${phraseIndex + 1} de ${songs[songIndex].phrases.length}`;
+      }
+
+      function wait(ms) {
+        return new Promise((resolve) => window.setTimeout(resolve, ms));
+      }
+
+      async function playSequence() {
+        if (isPlaying) return;
+        if (sequence.length === 0) {
+          sequence = songs[songIndex].phrases[phraseIndex];
+          showSequence();
+        }
+        isPlaying = true;
+        phase = "listen";
+        playerIndex = 0;
+        listenButton.disabled = true;
+        repeatButton.disabled = true;
+        fullSongButton.disabled = true;
+        keys.forEach((key) => { key.disabled = true; });
+        cat.classList.add("dancing");
+        say("¡Escucha la canción de Estrellita!", "¡Escucha Estrellita!");
+        await wait(850);
+        for (const noteIndex of sequence) {
+          playNote(noteIndex, 0.48);
+          await wait(950);
+        }
+        cat.classList.remove("dancing");
+        keys.forEach((key) => { key.disabled = false; });
+        isPlaying = false;
+        phase = "repeat";
+        listenButton.disabled = false;
+        repeatButton.disabled = false;
+        fullSongButton.disabled = false;
+        say("¡Ahora tú! Toca las mismas notas.", "¡Ahora tú!");
+      }
+
+      async function playFullSong() {
+        if (isPlaying) return;
+        const previousPhase = phase;
+        const previousSequence = sequence;
+        const previousPlayerIndex = playerIndex;
+        const fullSong = songs[songIndex].phrases.flat();
+
+        isPlaying = true;
+        phase = "fullSong";
+        listenButton.disabled = true;
+        repeatButton.disabled = true;
+        fullSongButton.disabled = true;
+        fullSongButton.textContent = "🎵 Reproduciendo...";
+        keys.forEach((key) => { key.disabled = true; });
+        cat.classList.add("dancing");
+        showSequence(fullSong);
+        say("¡Escucha la canción completa!", "¡La canción completa!");
+        await wait(1100);
+        for (const noteIndex of fullSong) {
+          playNote(noteIndex, 0.48);
+          await wait(600);
+        }
+
+        cat.classList.remove("dancing");
+        keys.forEach((key) => { key.disabled = false; });
+        sequence = previousSequence;
+        playerIndex = previousPlayerIndex;
+        phase = previousPhase;
+        isPlaying = false;
+        listenButton.disabled = false;
+        repeatButton.disabled = phase !== "repeat";
+        fullSongButton.disabled = false;
+        fullSongButton.textContent = "🎵 Canción completa";
+        showSequence();
+        say(phase === "repeat" ? "¡Ahora tú! Toca las mismas notas." : "¡Qué bonita canción! Pulsa “Escuchar” para practicar.", phase === "repeat" ? "¡Ahora tú!" : "¡Qué bonita canción!");
+      }
+
+      function handleKey(index) {
+        if (isPlaying) return;
+        playNote(index);
+        if (phase !== "repeat") {
+          say("¡Qué bonito suena! Pulsa “Escuchar” para jugar.", "¡Qué bonito!");
+          return;
+        }
+        if (sequence[playerIndex] !== index) {
+          playerIndex = 0;
+          say("¡Casi! Escucha otra vez y prueba.", "¡Casi! Escucha otra vez.");
+          repeatButton.disabled = false;
+          return;
+        }
+        playerIndex += 1;
+        if (playerIndex === sequence.length) {
+          stars += 1;
+          starBadge.textContent = `⭐ ${stars}`;
+          repeatButton.disabled = true;
+          phraseIndex += 1;
+          if (phraseIndex === songs[songIndex].phrases.length) {
+            phase = "ready";
+            listenButton.disabled = false;
+            fullSongButton.disabled = false;
+            phraseIndex = 0;
+            say("¡Terminaste la canción! Pulsa “Escuchar” para practicarla otra vez.", "¡Terminaste la canción! ¡Vamos a practicarla otra vez!");
+          } else {
+            phase = "transition";
+            isPlaying = true;
+            keys.forEach((key) => { key.disabled = true; });
+            listenButton.disabled = true;
+            fullSongButton.disabled = true;
+            say("¡Muy bien! ¡Escucha la siguiente parte!", "¡Muy bien!");
+            window.setTimeout(() => {
+              if (phase !== "transition") return;
+              sequence = songs[songIndex].phrases[phraseIndex];
+              showSequence();
+              isPlaying = false;
+              playSequence();
+            }, 1200);
+          }
+          updateSongBadge();
+        }
+      }
+
+      keys.forEach((key) => {
+        key.addEventListener("click", () => handleKey(Number(key.dataset.note)));
+      });
+
+      listenButton.addEventListener("click", () => {
+        if (phase === "ready" || phase === "repeat") {
+          if (phase === "ready") {
+            sequence = songs[songIndex].phrases[phraseIndex];
+            showSequence();
+            updateSongBadge();
+          }
+          playSequence();
+        }
+      });
+
+      repeatButton.addEventListener("click", () => {
+        if (phase === "repeat") playSequence();
+      });
+
+      fullSongButton.addEventListener("click", playFullSong);
+
+      soundToggle.addEventListener("click", () => {
+        soundOn = !soundOn;
+        soundToggle.textContent = soundOn ? "🔊 Sonido" : "🔇 Silencio";
+        soundToggle.setAttribute("aria-pressed", String(soundOn));
+        if (!soundOn && "speechSynthesis" in window) window.speechSynthesis.cancel();
+      });
+    })();
+  </script>
+</body>
+</html>

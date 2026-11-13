@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fff8e9">
+    <meta
+      name="description"
+      content="Un juego visual para peques: vierte el líquido de colores en su botellita."
+    >
+    <title>Botellitas de colores</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="game.js" defer></script>
+  </head>
+  <body>
+    <main class="game">
+      <header class="topbar">
+        <span class="brand-icon" aria-hidden="true">🧃</span>
+        <span id="level-label" class="level-label" aria-label="Nivel 1">⭐ 1</span>
+        <div class="topbar-actions">
+          <button id="music-button" class="icon-button music-button" type="button" aria-label="Activar música" aria-pressed="false">
+            🎵
+          </button>
+          <button id="reset-button" class="icon-button" type="button" aria-label="Empezar de nuevo">
+            🔄
+          </button>
+        </div>
+      </header>
+
+      <section class="visual-guide" aria-label="Toca una botellita y luego la del color igual">
+        <span class="guide-picture" aria-hidden="true">👆</span>
+        <span class="guide-arrow" aria-hidden="true">➜</span>
+        <span class="guide-picture" aria-hidden="true">💧</span>
+        <span class="guide-arrow" aria-hidden="true">➜</span>
+        <span class="guide-picture" aria-hidden="true">👆</span>
+      </section>
+
+      <section id="play-area" class="play-area" aria-label="Juego visual de verter colores">
+        <svg id="pour-effect" class="pour-effect" aria-hidden="true"></svg>
+
+        <div id="targets" class="bottle-row target-row" aria-label="Botellitas para llenar"></div>
+        <div id="match-guide" class="match-guide" aria-hidden="true"></div>
+        <div id="sources" class="bottle-row source-row" aria-label="Botellitas con líquido"></div>
+
+        <div class="controls">
+          <button id="help-button" class="icon-button help-button" type="button" aria-label="Mostrar una pista">
+            💡
+          </button>
+        </div>
+        <p id="message" class="visually-hidden" role="status" aria-live="polite"></p>
+        <div id="celebration" class="celebration" aria-hidden="true">
+          <span class="kitten" aria-hidden="true">🐱</span>
+          <div class="celebration-card">
+            <p id="praise" class="praise">¡Muy bien!</p>
+            <button id="next-level-button" class="next-level-button" type="button" disabled>
+              Próximo nivel...
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
