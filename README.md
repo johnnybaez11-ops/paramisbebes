@@ -2,6 +2,10 @@
 
 Portal estático con juegos infantiles organizados por categoría. La página principal funciona en GitHub Pages y Netlify; cada juego vive en su propia carpeta dentro de `juegos/`.
 
+## Activar GitHub Pages
+
+En el repositorio, abre **Settings → Pages**, elige **Deploy from a branch**, selecciona `main` y la carpeta `/(root)`, y pulsa **Save**. La página se publicará en `https://johnnybaez11-ops.github.io/paramisbebes/`; el primer despliegue puede tardar unos minutos.
+
 ## Agregar un juego
 
 1. Crea una carpeta, por ejemplo `juegos/memoria/`.
