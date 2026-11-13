@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#fff8eb">
-  <meta name="description" content="Juegos divertidos para aprender, explorar y jugar en familia.">
+  <meta name="description" content="Juegos y videos infantiles para aprender, explorar y jugar en familia.">
   <title>Juega y aprende | Juegos para niños</title>
   <style>
     :root {
@@ -250,6 +250,39 @@
 
     .add-more strong { color: #5c438e; }
 
+    .videos { padding: 0 0 48px; }
+    .video-description { margin: 10px 0 18px; color: #706481; line-height: 1.55; }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .video-card {
+      min-width: 0;
+      overflow: hidden;
+      border: 3px solid #fff;
+      border-radius: 26px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .video-title { margin: 0; padding: 16px 18px; color: #4b3b70; font-size: 1.1rem; }
+    .video-frame { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; background: #eee5ff; }
+
+    .video-empty, .video-error {
+      margin: 16px 0 0;
+      padding: 18px 20px;
+      border: 2px dashed #d9c9ed;
+      border-radius: 20px;
+      background: rgba(255,255,255,.68);
+      color: #706481;
+      line-height: 1.55;
+    }
+
+    .video-error { border-color: #e8b3b3; }
+
     .footer {
       padding: 20px 0 30px;
       border-top: 1px solid #eadfce;
@@ -266,6 +299,7 @@
       .catalog { padding: 30px 0 40px; }
       .catalog-heading { align-items: flex-start; flex-direction: column; }
       .game-grid { grid-template-columns: 1fr; gap: 14px; }
+      .video-grid { grid-template-columns: 1fr; gap: 14px; }
       .game-art { min-height: 155px; }
     }
 
@@ -274,6 +308,7 @@
     }
   </style>
   <script src="./juegos.js" defer></script>
+  <script src="./videos.js" defer></script>
 </head>
 <body>
   <div class="page">
@@ -310,6 +345,17 @@
           <strong>¿Quieres agregar otro juego?</strong>
           Crea una carpeta dentro de <code>juegos/</code>, coloca allí sus archivos y añade una tarjeta en <code>juegos.js</code>.
         </aside>
+      </section>
+
+      <section class="videos" aria-labelledby="videos-title">
+        <div class="catalog-heading">
+          <h2 id="videos-title">Videos infantiles de YouTube</h2>
+        </div>
+        <p class="video-description">Canciones, cuentos y videos para disfrutar en familia.</p>
+        <p class="video-empty" id="video-empty" aria-live="polite">
+          Esta sección está lista. Un adulto puede agregar videos apropiados para los niños en <code>videos.js</code>.
+        </p>
+        <div class="video-grid" id="video-grid"></div>
       </section>
     </main>
 

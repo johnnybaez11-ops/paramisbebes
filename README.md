@@ -14,3 +14,18 @@ En el repositorio, abre **Settings → Pages**, elige **Deploy from a branch**, 
 4. Comprueba que tienes derecho a publicar todos los recursos del juego y sube los cambios a la rama `main`.
 
 Las categorías disponibles son `aprender`, `aventura` y `accion`. Si agregas una categoría nueva, añade también un filtro en `index.html`.
+
+## Agregar videos de YouTube
+
+Abre `videos.js` y agrega objetos al arreglo `videos` con un título y un enlace HTTPS de YouTube. Por ejemplo:
+
+```js
+const videos = [
+  {
+    title: "Título del video",
+    url: "https://www.youtube.com/watch?v=ID_DEL_VIDEO"
+  }
+];
+```
+
+La página incrusta los videos con el reproductor de YouTube. Elige contenido apropiado para niños y revisa que el video permita la reproducción incrustada.
